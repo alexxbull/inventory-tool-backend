@@ -4,3 +4,7 @@ Backend server that [powers the Inventory Tool](https://github.com/alexxbull/inv
 ## Implementation:
 - Server written in Go
 - RESTful APIs
+- Connects to PostgreSQL server for storing / retrieving data
+
+### TODO
+* Implement sessions
