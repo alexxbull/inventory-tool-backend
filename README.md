@@ -1,2 +1,2 @@
-# inventory-tool-backend
+# Inventory Tool Backend
 Backend server that powers the Inventory Tool.
