@@ -72,10 +72,6 @@ func main() {
 	startDatabase()
 	handleRoutes()
 
-	// create a table if one doesn't exist
-	if err := createDBT(); err != nil {
-		return
-	}
 	// close database connection
 	defer db.Close()
 
