@@ -1,0 +1,14 @@
+{
+    "comment": "",
+    "ignore": "test",
+    "package": [
+        {
+            "path": [
+				"github.com/rs/cors", 
+				"github.com/lib/pq"
+			],
+        },
+        ...
+    ],
+    "rootPath": "github.com/heroku/go-getting-started"
+}
