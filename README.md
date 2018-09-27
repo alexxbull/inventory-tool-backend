@@ -2,7 +2,7 @@
 Backend server that [powers the Inventory Tool](https://github.com/alexxbull/inventory-tool).
 
 ## Website
-https://inventory-tool-react.appspot.com/
+https://blooming-ravine-27911.herokuapp.com/
 
 ## Implementation:
 - Server written in Go
