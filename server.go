@@ -40,6 +40,8 @@ type Item struct {
 func startDatabase() {
 	var err error
 	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	fmt.Println(os.Getenv("DATABASE_URL"))
+	fmt.Println(err)
 	if err != nil {
 		log.Fatal(err)
 	}
