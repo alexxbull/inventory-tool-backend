@@ -7,7 +7,7 @@ import (
 // create a database table if one doesn't exist
 func createDBT() error {
 	sqlStatement := `
-	CREATE TABLE IF NOT EXISTS inventory.items(
+	CREATE TABLE IF NOT EXISTS items(
 		ID Serial PRIMARY KEY NOT NULL,
 		Name TEXT  NOT NULL,
 		Price NUMERIC(11, 2) NOT NULL,
