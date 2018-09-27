@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/rs/cors"
+	"os"
 
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 const (
-	port = 8080
 	// database constants
 	dbhost   = "localhost"
 	dbport   = 5432
@@ -21,13 +20,11 @@ const (
 	dbname   = "inventory"
 )
 
-var db *sql.DB
-var mux *http.ServeMux
-
-func init() {
-	startDatabase()
-	handleRoutes()
-}
+var (
+	db   *sql.DB
+	mux  *http.ServeMux
+	port string
+)
 
 // Item object that stores an item's properties
 type Item struct {
@@ -50,13 +47,6 @@ func startDatabase() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// check if connected to database
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Connected to database.")
 }
 
 // initialize valid server routes
@@ -75,21 +65,34 @@ func handleRoutes() {
 	// PUT
 	mux.HandleFunc("/items/edit", editItem)
 
-	mux.HandleFunc("/", startServer)
-}
-
-func startServer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Server now running...")
+	// startup server message to show running successfully
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Server running on port", port)
+	})
 }
 
 func main() {
+	// connect to database and build endpoints
+	startDatabase()
+	handleRoutes()
+
+	// create a table if one doesn't exist
+	if err := createDBT(); err != nil {
+		return
+	}
 	// close database connection
 	defer db.Close()
 
 	// enable cors
 	handler := cors.AllowAll().Handler(mux)
 
+	// get port number from environment variable
+	port = os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	// start server
-	addr := fmt.Sprintf(":%d", 8080)
+	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, handler)
 }

@@ -18,7 +18,7 @@ func getItem(w http.ResponseWriter, req *http.Request) (Item, error) {
 		UserID    string
 	}
 
-	// read JSON data into struct
+	// store JSON data in struct object
 	temp := tempItem{}
 	err := json.NewDecoder(req.Body).Decode(&temp)
 
@@ -58,7 +58,7 @@ func getItem(w http.ResponseWriter, req *http.Request) (Item, error) {
 		itmID = i64
 	}
 
-	// make proper item
+	// make proper item with correct data types
 	item := Item{
 		ID:        itmID,
 		Name:      temp.Name,
