@@ -38,12 +38,8 @@ type Item struct {
 
 // connect to datatbase
 func startDatabase() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		dbhost, dbport, user, password, dbname)
-
 	var err error
-	db, err = sql.Open("postgres", psqlInfo)
+	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,7 +82,7 @@ func main() {
 	// enable cors
 	handler := cors.AllowAll().Handler(mux)
 
-	// get port number from environment variable
+	// get server port number
 	port = os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
