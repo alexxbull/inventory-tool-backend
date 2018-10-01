@@ -36,12 +36,28 @@ type Item struct {
 	UserID    int
 }
 
+// User object that stores a user's properties
+type User struct {
+	ID       int
+	Email    string
+	Name     string
+	Password string
+}
+
 // connect to datatbase
 func startDatabase() {
+	var psqlInfo string
+
+	// use localhost if environment variable DATABASE_URL is empty
+	if _, exist := os.LookupEnv("DATABASE_URL"); exist {
+		psqlInfo = os.Getenv("DATABASE_URL")
+	} else {
+		psqlInfo = fmt.Sprintf("host=%s port=%d user=%s "+"password=%s dbname=%s sslmode=disable",
+			dbhost, dbport, user, password, dbname)
+	}
+
 	var err error
-	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	fmt.Println(os.Getenv("DATABASE_URL"))
-	fmt.Println(err)
+	db, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,6 +75,7 @@ func handleRoutes() {
 
 	// POST
 	mux.HandleFunc("/items/add", addItem)
+	mux.HandleFunc("/users", handleUser)
 
 	// PUT
 	mux.HandleFunc("/items/edit", editItem)
