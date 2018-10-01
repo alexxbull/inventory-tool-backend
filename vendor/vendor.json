@@ -1,0 +1,25 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "j+vBozuP9t1baDRdfEykQSP4AGw=",
+			"path": "github.com/lib/pq",
+			"revision": "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79",
+			"revisionTime": "2018-08-23T06:29:44Z"
+		},
+		{
+			"checksumSHA1": "GX2hcQP8YqrXH+laJJIxUFsqoxU=",
+			"path": "github.com/lib/pq/oid",
+			"revision": "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79",
+			"revisionTime": "2018-08-23T06:29:44Z"
+		},
+		{
+			"checksumSHA1": "aJjZR7gm/kWFDnbhhbk0bo9uB2o=",
+			"path": "github.com/rs/cors",
+			"revision": "dc7332ab32be5dfec05dae2a6ab79cbfa53b6407",
+			"revisionTime": "2018-08-26T18:02:56Z"
+		}
+	],
+	"rootPath": "inventory-tool"
+}
