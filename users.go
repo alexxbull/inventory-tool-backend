@@ -1,13 +1,11 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha256"
 	"database/sql"
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 const privateKey = "supersecretkey" // private key used for generating password hash
@@ -36,13 +34,6 @@ func handleUser(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// return a hash generated from the given string
-func getHash(s string) string {
-	h := hmac.New(sha256.New, []byte(privateKey))
-	io.WriteString(h, s)
-	return fmt.Sprintf("%x", h.Sum(nil))
-}
-
 func getUser(u User) (User, error) {
 	// check if the user's email has already been registered
 	sqlGetUser := `
@@ -69,7 +60,13 @@ func register(u User, w http.ResponseWriter) {
 		INSERT INTO users (Email, Name, Password)
 		VALUES ($1, $2, $3);`
 
-	_, err = db.Exec(sqlInsert, u.Email, u.Name, getHash(u.Password))
+	// get hashed password
+	hashedPassword, err := hashPassword(u.Password)
+	if err != nil {
+		http.Error(w, "error hashing password", 500)
+	}
+
+	_, err = db.Exec(sqlInsert, u.Email, u.Name, hashedPassword)
 	if err != nil {
 		http.Error(w, "unable to add user", 500)
 		return
@@ -95,8 +92,9 @@ func signIn(u User, w http.ResponseWriter) {
 		return
 	}
 
-	// check if the user's password matches the password in the database
-	if dbUser.Password != getHash(u.Password) {
+	// check if the user's password matches the hashed password in the database
+	passwordError := verifyPassword(u.Password, dbUser.Password)
+	if !passwordError {
 		http.Error(w, "invalid credentials", 400)
 		return
 	}
@@ -113,4 +111,15 @@ func sendUserID(u User, w http.ResponseWriter) {
 		return
 	}
 	w.Write(jsonID)
+}
+
+// return a hash generated from the given string
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func verifyPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
