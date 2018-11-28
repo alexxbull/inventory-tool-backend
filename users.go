@@ -34,17 +34,6 @@ func handleUser(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// return a hash generated from the given string
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	return string(bytes), err
-}
-
-func verifyPassword(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
-
 func getUser(u User) (User, error) {
 	// check if the user's email has already been registered
 	sqlGetUser := `
@@ -122,4 +111,15 @@ func sendUserID(u User, w http.ResponseWriter) {
 		return
 	}
 	w.Write(jsonID)
+}
+
+// return a hash generated from the given string
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func verifyPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }

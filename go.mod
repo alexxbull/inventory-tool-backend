@@ -1,4 +1,4 @@
-module github.com/alexxbull/inventory-tool-backend
+module inventory-tool
 
 require (
 	github.com/lib/pq v1.0.0
