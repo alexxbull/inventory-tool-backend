@@ -8,8 +8,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const privateKey = "supersecretkey" // private key used for generating password hash
-
 // register or sign in in user
 func handleUser(w http.ResponseWriter, req *http.Request) {
 	// check if request Method is valid
